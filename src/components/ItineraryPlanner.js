@@ -1,29 +1,44 @@
 import React, { useState, useCallback } from 'react';
 import { APIProvider, Map, AdvancedMarker, Pin, InfoWindow } from '@vis.gl/react-google-maps';
 import TripPlannerForm from './TripPlannerForm';
+import RegenerateButton from './RegenerateButton';
+import SaveButton from './SaveButton';
+import LoadingOverlay from './LoadingOverlay';
+import { useItinerary } from './ItineraryContext';
 
 const API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
 
 const ItineraryPlanner = () => {
-  const [itinerary, setItinerary] = useState(null);
+  const { itinerary, setItinerary, formData, setFormData } = useItinerary();
   const [selectedDay, setSelectedDay] = useState(0);
   const [selectedActivity, setSelectedActivity] = useState(null);
   const [openInfoWindow, setOpenInfoWindow] = useState(null);
   const [mapZoom, setMapZoom] = useState(12);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleFormSubmit = async (formData) => {
+  const handleFormSubmit = async (data) => {
+    setFormData(data);
+    setIsLoading(true);
     try {
       const response = await fetch('http://localhost:8080/itinerary/generate', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(data),
       });
-      const data = await response.json();
-      setItinerary(data.itinerary);
+      const responseData = await response.json();
+      setItinerary(responseData.itinerary);
     } catch (error) {
       console.error('Error fetching itinerary:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleRegenerate = async () => {
+    if (formData) {
+      await handleFormSubmit(formData);
     }
   };
 
@@ -69,7 +84,6 @@ const ItineraryPlanner = () => {
   if (!itinerary) {
     return (
       <div className="container mx-auto p-4">
-        <h1 className="text-3xl font-bold mb-6 text-center">Plan Your Trip</h1>
         <TripPlannerForm onSubmit={handleFormSubmit} API_KEY={API_KEY} />
       </div>
     );
@@ -77,7 +91,12 @@ const ItineraryPlanner = () => {
 
   return (
     <div className="container mx-auto p-4">
+      {isLoading && <LoadingOverlay />}
       <h1 className="text-3xl font-bold mb-6 text-center">Your Itinerary</h1>
+      <div className="flex justify-end space-x-4 mb-4">
+        <RegenerateButton onRegenerate={handleRegenerate} />
+        <SaveButton itinerary={itinerary} formData={formData}  />
+      </div>
       <div className="flex flex-col md:flex-row gap-6">
         <div className="w-full md:w-1/3">
           <div className="flex mb-4 overflow-x-auto">
@@ -106,12 +125,11 @@ const ItineraryPlanner = () => {
                 }`}
                 onClick={() => handleActivityClick(activity)}
               >
-                <h1 className="text-sm text-gray-500">{activity.type}</h1>
                 <h3 className="font-bold">{activity.name}</h3>
                 <p className="text-sm text-gray-600">{activity.description}</p>
                 <p className="text-sm font-semibold mt-2">{activity.location}</p>
                 <p className="text-sm text-gray-500 mt-2">
-                  Duration: {activity.duration}
+                  Duration: {activity.duration} {(activity.duration>1) ? "hours" : "hour"} 
                 </p>
               </div>
             ))}
@@ -151,7 +169,6 @@ const ItineraryPlanner = () => {
                   <div className="p-2 max-w-xs">
                     <h3 className="font-bold text-lg mb-1">{openInfoWindow.name}</h3>
                     <p className="text-sm mb-2">{openInfoWindow.description}</p>
-                    <p className="text-sm font-semibold">Duration: {openInfoWindow.duration}</p>
                   </div>
                 </InfoWindow>
               )}
