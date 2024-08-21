@@ -71,18 +71,25 @@ const ItineraryPlanner = () => {
     setOpenInfoWindow(null);
   };
 
-  const handleZoomChanged = (zoom) => {
-    setMapZoom(zoom);
+  const handleZoomChanged = (e) => {
+    const zoom = e.detail?.zoom;
+    if (typeof zoom === 'number') {
+      setMapZoom(zoom);
+    } else {
+      console.error('Zoom value is invalid:', zoom);
+    }
   };
 
   const mapCenter = useCallback(() => {
-    if (!itinerary) return { lat: 0, lng: 0 };
+    if (!itinerary || !itinerary[selectedDay]) return { lat: 0, lng: 0 }; // Broad view of the world
     if (selectedActivity) {
-      return selectedActivity.coordinates;
+        return selectedActivity.coordinates || { lat: 0, lng: 0 };
     }
-    const activities = itinerary[selectedDay].activities;
-    return activities[Math.floor(activities.length / 2)].coordinates;
-  }, [selectedDay, selectedActivity, itinerary]);
+    const activities = itinerary[selectedDay]?.activities || [];
+    if (activities.length === 0) return { lat: 0, lng: 0 };
+    return activities[Math.floor(activities.length / 2)]?.coordinates || { lat: 0, lng: 0 };
+}, [selectedDay, selectedActivity, itinerary]);
+  
 
   if (!itinerary) {
     return (
@@ -125,7 +132,7 @@ const ItineraryPlanner = () => {
             ))}
           </div>
           <div className="space-y-4 overflow-y-auto max-h-[calc(100vh-200px)] pr-2">
-            {itinerary[selectedDay].activities.map((activity, index) => (
+            {itinerary[selectedDay]?.activities?.map((activity, index) => (
               <div
                 key={index}
                 className={`p-4 border rounded-md cursor-pointer transition duration-200 ${selectedActivity === activity
@@ -153,10 +160,10 @@ const ItineraryPlanner = () => {
               disableDefaultUI={false}
               mapId={'19eb6e4a799c5279'}
               onClick={handleMapClick}
-              onZoomChanged={(e) => handleZoomChanged(e.detail.zoom)}
+              onZoomChanged={(e) => handleZoomChanged(e)}
               className="w-full h-full rounded-lg shadow-md"
             >
-              {itinerary[selectedDay].activities.map((activity, index) => (
+              {itinerary[selectedDay]?.activities?.map((activity, index) => (
                 <AdvancedMarker
                   key={index}
                   position={activity.coordinates}
