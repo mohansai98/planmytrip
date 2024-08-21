@@ -9,6 +9,7 @@ import MyPlans from './components/MyPlans';
 import ForgotPassword from './components/ForgotPassword';
 import ResetPassword from './components/ResetPassword';
 import Navbar from './components/Navbar';
+import Footer from './components/Footer';
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
               <Route path="/my-plans" element={<MyPlans />} />
             </Routes>
           </div>
+          <Footer />
         </ItineraryProvider>
       </AuthProvider>
     </Router>
