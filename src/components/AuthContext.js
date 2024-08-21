@@ -1,6 +1,7 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 
 const AuthContext = createContext(null);
+const API_URL = process.env.REACT_APP_API_URL;
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -9,7 +10,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      fetch('http://localhost:8080/auth/validate-token', {
+      fetch(`${API_URL}/auth/validate-token`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

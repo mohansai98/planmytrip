@@ -1,17 +1,20 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Alert from './Alert';
+
+const API_URL = process.env.REACT_APP_API_URL;
 
 const ForgotPassword = () => {
     const [email, setEmail] = useState('');
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
-
+    const [alert, setAlert] = useState({ message: '', type: '' });
 
     const handleRequestReset = async (e) => {
         e.preventDefault();
         setIsLoading(true);
         try {
-            const response = await fetch('http://localhost:8080/auth/request-reset-password', {
+            const response = await fetch(`${API_URL}/auth/request-reset-password`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -20,20 +23,29 @@ const ForgotPassword = () => {
             });
             const data = await response.json();
             if (response.ok) {
-                alert('A reset code has been sent to your email.');
-                navigate('/reset-password', { state: { email } });
+                setAlert({ message: 'A reset code has been sent to your email.', type: 'success' });
+                setTimeout(() => {
+                    navigate('/reset-password', { state: { email } });
+                }, 5000);           
             } else {
-                alert(data.message || 'Failed to send reset code, please try again.');
+                setAlert({ message: data.message || 'Failed to send reset code, please try again.', type: 'error' });
             }
         } catch (error) {
-            console.error('Error requesting password reset:', error);
-            alert('An error occurred while requesting a password reset.');
+            setAlert({ message: 'An error occurred while requesting a password reset.', type: 'error' });
         } finally {
             setIsLoading(false);
         }
     };
 
     return (
+        <div>
+            {alert.message && (
+                <Alert
+                    message={alert.message}
+                    type={alert.type}
+                    onClose={() => setAlert({ message: '', type: '' })}
+                />
+            )}
         <div className="container mx-auto p-4 flex justify-center">
             <div className="max-w-md w-full bg-white rounded-lg shadow-md p-6">
                 <h2 className="text-2xl font-bold mb-4">Forgot Password</h2>
@@ -59,6 +71,7 @@ const ForgotPassword = () => {
                     </button>
                 </form>
             </div>
+        </div>
         </div>
     );
 };

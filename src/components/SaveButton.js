@@ -2,13 +2,15 @@ import React, { useState } from 'react';
 import { useAuth } from './AuthContext';
 import LoadingOverlay from './LoadingOverlay';
 
-const SaveButton = ({ itinerary, formData }) => {
+const API_URL = process.env.REACT_APP_API_URL;
+
+const SaveButton = ({ itinerary, formData, setAlert }) => {
     const { user } = useAuth();
     const [isSaving, setIsSaving] = useState(false);
 
     const handleSave = async () => {
         if (!user) {
-            alert('Please log in to save the itinerary');
+            setAlert({ message: 'Please log in to save the itinerary', type: 'error' });
             return;
         }
 
@@ -20,7 +22,7 @@ const SaveButton = ({ itinerary, formData }) => {
         setIsSaving(true);
 
         try {
-            const response = await fetch('http://localhost:8080/itinerary/save', {
+            const response = await fetch(`${API_URL}/itinerary/save`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -30,13 +32,12 @@ const SaveButton = ({ itinerary, formData }) => {
             });
 
             if (response.ok) {
-                alert('Itinerary saved successfully!');
+                setAlert({ message: 'Itinerary saved successfully!', type: 'success' });
             } else {
-                alert('Failed to save itinerary. Please try again.');
+                setAlert({ message: 'Failed to save itinerary. Please try again.', type: 'error' });
             }
         } catch (error) {
-            console.error('Error saving itinerary:', error);
-            alert('An error occurred while saving the itinerary.');
+            setAlert({ message: 'An error occurred while saving the itinerary.', type: 'error' });
         } finally {
             setIsSaving(false);
         }
