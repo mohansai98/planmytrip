@@ -7,7 +7,7 @@ const API_URL = process.env.REACT_APP_API_URL;
 
 const MyPlans = () => {
     const user = localStorage.getItem('token');
-    const { setItinerary } = useItinerary();
+    const { setItinerary, setFormData } = useItinerary();
     const [userItineraries, setUserItineraries] = useState([]);
     const [idToDelete, setIdToDelete] = useState(null);
     const navigate = useNavigate();
@@ -52,7 +52,13 @@ const MyPlans = () => {
     }, [user, navigate, idToDelete]);
 
     const handleViewItinerary = (itinerary) => {
-        setItinerary(itinerary);
+        setFormData({
+            source: itinerary.source,
+            destination: itinerary.destination,
+            fromDate: itinerary.fromDate,
+            toDate: itinerary.toDate,
+          });
+        setItinerary(itinerary.itinerary);
         navigate('/');
     };
 
@@ -95,7 +101,7 @@ const MyPlans = () => {
                         <p><strong>To:</strong> {new Date(itinerary.toDate).toLocaleDateString()}</p>
                         <div className="mt-4 flex space-x-4">
                             <button
-                                onClick={() => handleViewItinerary(itinerary.itinerary)}
+                                onClick={() => handleViewItinerary(itinerary)}
                                 className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300"
                             >
                                 View Itinerary
