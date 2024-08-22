@@ -13,7 +13,7 @@ import Footer from './components/Footer';
 
 function App() {
   return (
-    <Router>
+    <Router basename="/planmytrip">
       <AuthProvider>
         <ItineraryProvider>
           <div className="flex flex-col min-h-screen bg-gray-100">
