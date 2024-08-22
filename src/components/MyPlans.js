@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useItinerary } from './ItineraryContext';
 import { useNavigate } from 'react-router-dom';
 import Alert from './Alert';
+import LoadingOverlay from './LoadingOverlay';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -12,9 +13,11 @@ const MyPlans = () => {
     const [idToDelete, setIdToDelete] = useState(null);
     const navigate = useNavigate();
     const [alert, setAlert] = useState({ message: '', type: '' });
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         const fetchUserItineraries = async () => {
+            setIsLoading(true);
             try {
                 const response = await fetch(`${API_URL}/itinerary/list`, {
                     headers: {
@@ -41,6 +44,8 @@ const MyPlans = () => {
                 }
             } catch (error) {
                 setAlert({ message: `Error fetching itineraries: ${error.message}`, type: 'error' });
+            } finally {
+                setIsLoading(false);
             }
         };
 
@@ -63,6 +68,7 @@ const MyPlans = () => {
     };
 
     const handleDeleteItinerary = async (id) => {
+        setIsLoading(true);
         try {
             const response = await fetch(`${API_URL}/itinerary/${id}`, {
                 method: 'DELETE',
@@ -79,6 +85,8 @@ const MyPlans = () => {
             }
         } catch (error) {
             setAlert({ message: `Error deleting itinerary: ${error.message}`, type: 'error' });
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -91,14 +99,15 @@ const MyPlans = () => {
                     onClose={() => setAlert({ message: '', type: '' })}
                 />
             )}
+            {isLoading && <LoadingOverlay />}
             <h1 className="text-3xl font-bold mb-6 text-center">My Plans</h1>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {userItineraries.length === 0 && "No itineraries found."}
                 {userItineraries.map((itinerary, index) => (
                     <div key={index} className="border p-4 rounded shadow-md">
                         <h3 className="text-xl font-semibold mb-2">{itinerary.source} to {itinerary.destination}</h3>
-                        <p><strong>From:</strong> {new Date(itinerary.fromDate).toLocaleDateString()}</p>
-                        <p><strong>To:</strong> {new Date(itinerary.toDate).toLocaleDateString()}</p>
+                        <p><strong>From:</strong> {itinerary.fromDate}</p>
+                        <p><strong>To:</strong> {itinerary.toDate}</p>
                         <div className="mt-4 flex space-x-4">
                             <button
                                 onClick={() => handleViewItinerary(itinerary)}

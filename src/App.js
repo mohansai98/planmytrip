@@ -16,19 +16,20 @@ function App() {
     <Router>
       <AuthProvider>
         <ItineraryProvider>
-
-          <Navbar />
-          <div className="container mx-auto p-4">
-            <Routes>
-              <Route path="/" element={<ItineraryPlanner />} />
-              <Route path="/login" element={<LoginForm />} />
-              <Route path="/register" element={<RegisterForm />} />
-              <Route path="/forgot-password" element={<ForgotPassword />} />
-              <Route path="/reset-password" element={<ResetPassword />} />
-              <Route path="/my-plans" element={<MyPlans />} />
-            </Routes>
+          <div className="flex flex-col min-h-screen bg-gray-100">
+            <Navbar />
+            <main className="flex-grow container mx-auto p-4">
+              <Routes>
+                <Route path="/" element={<ItineraryPlanner />} />
+                <Route path="/login" element={<LoginForm />} />
+                <Route path="/register" element={<RegisterForm />} />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route path="/reset-password" element={<ResetPassword />} />
+                <Route path="/my-plans" element={<MyPlans />} />
+              </Routes>
+            </main>
+            <Footer />
           </div>
-          <Footer />
         </ItineraryProvider>
       </AuthProvider>
     </Router>

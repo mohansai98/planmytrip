@@ -6,6 +6,7 @@ import SaveButton from './SaveButton';
 import LoadingOverlay from './LoadingOverlay';
 import { useItinerary } from './ItineraryContext';
 import Alert from './Alert';
+import TripDashboard from './TripDashboard';
 
 const API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
 const API_URL = process.env.REACT_APP_API_URL;
@@ -83,19 +84,21 @@ const ItineraryPlanner = () => {
   const mapCenter = useCallback(() => {
     if (!itinerary || !itinerary[selectedDay]) return { lat: 0, lng: 0 }; // Broad view of the world
     if (selectedActivity) {
-        return selectedActivity.coordinates || { lat: 0, lng: 0 };
+      return selectedActivity.coordinates || { lat: 0, lng: 0 };
     }
     const activities = itinerary[selectedDay]?.activities || [];
     if (activities.length === 0) return { lat: 0, lng: 0 };
     return activities[Math.floor(activities.length / 2)]?.coordinates || { lat: 0, lng: 0 };
-}, [selectedDay, selectedActivity, itinerary]);
-  
+  }, [selectedDay, selectedActivity, itinerary]);
+
 
   if (!itinerary) {
     return (
       <div className="container mx-auto p-4">
-        <h1 className="text-3xl font-bold text-center">Plan Your Itinerary</h1>
-        <TripPlannerForm onSubmit={handleFormSubmit} API_KEY={API_KEY} />
+        <h1 className="text-3xl font-bold text-center mb-8">Plan Your Itinerary</h1>
+        <div className="max-w-2xl mx-auto">
+          <TripPlannerForm onSubmit={handleFormSubmit} API_KEY={API_KEY} />
+        </div>
       </div>
     );
   }
@@ -110,20 +113,29 @@ const ItineraryPlanner = () => {
         />
       )}
       {isLoading && <LoadingOverlay />}
-      <h1 className="text-3xl font-bold mb-6 text-center">Your Itinerary</h1>
-      <div className="flex justify-end space-x-4 mb-4">
-        <RegenerateButton onRegenerate={handleRegenerate} />
-        <SaveButton itinerary={itinerary} formData={formData} setAlert={setAlert} />
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 space-y-4 md:space-y-0">
+        <h1 className="text-xl md:text-2xl font-bold">Your Itinerary</h1>
+        <div className="flex space-x-2">
+          <RegenerateButton onRegenerate={handleRegenerate} />
+          <SaveButton itinerary={itinerary} formData={formData} setAlert={setAlert} />
+        </div>
       </div>
-      <div className="flex flex-col md:flex-row gap-6">
-        <div className="w-full md:w-1/3">
-          <div className="flex mb-4 overflow-x-auto">
+
+      <TripDashboard
+        source={formData.source}
+        destination={formData.destination}
+        fromDate={formData.fromDate}
+        toDate={formData.toDate}
+      />
+      <div className="flex flex-col lg:flex-row gap-6 flex-grow">
+        <div className="w-full lg:w-1/3 flex flex-col">
+          <div className="flex mb-4 overflow-x-auto pb-2">
             {itinerary.map((day, index) => (
               <button
                 key={index}
                 className={`px-4 py-2 whitespace-nowrap rounded-md mr-2 ${selectedDay === index
-                    ? 'bg-blue-500 text-white'
-                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                  ? 'bg-blue-500 text-white'
+                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                   }`}
                 onClick={() => handleDayClick(index)}
               >
@@ -131,13 +143,13 @@ const ItineraryPlanner = () => {
               </button>
             ))}
           </div>
-          <div className="space-y-4 overflow-y-auto max-h-[calc(100vh-200px)] pr-2">
+          <div className="flex-grow overflow-y-auto pr-2 space-y-4">
             {itinerary[selectedDay]?.activities?.map((activity, index) => (
               <div
                 key={index}
                 className={`p-4 border rounded-md cursor-pointer transition duration-200 ${selectedActivity === activity
-                    ? 'bg-blue-100 border-blue-500'
-                    : 'bg-white hover:bg-gray-50'
+                  ? 'bg-blue-100 border-blue-500'
+                  : 'bg-white hover:bg-gray-50'
                   }`}
                 onClick={() => handleActivityClick(activity)}
               >
@@ -145,13 +157,13 @@ const ItineraryPlanner = () => {
                 <p className="text-sm text-gray-600">{activity.description}</p>
                 <p className="text-sm font-semibold mt-2">{activity.location}</p>
                 <p className="text-sm text-gray-500 mt-2">
-                  Duration: {activity.duration} {(activity.duration > 1) ? "hours" : "hour"}
+                  Duration: {activity.duration} {activity.duration > 1 ? "hours" : "hour"}
                 </p>
               </div>
             ))}
           </div>
         </div>
-        <div className="w-full md:w-2/3 h-[calc(100vh-100px)]">
+        <div className="w-full lg:w-2/3 h-[500px] lg:h-auto">
           <APIProvider apiKey={API_KEY}>
             <Map
               center={mapCenter()}

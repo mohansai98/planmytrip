@@ -1,4 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const AuthContext = createContext(null);
 const API_URL = process.env.REACT_APP_API_URL;
@@ -6,6 +7,8 @@ const API_URL = process.env.REACT_APP_API_URL;
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [name, setName] = useState('');
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -44,6 +47,9 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     localStorage.removeItem('token');
     setUser(null);
+    if (location.pathname === '/my-plans') {
+      navigate('/');
+    }
   };
 
   return (
