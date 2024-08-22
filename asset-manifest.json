@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/planmytrip/static/css/main.e955d34d.css",
-    "main.js": "/planmytrip/static/js/main.d28d8ccf.js",
-    "static/js/453.d855a71b.chunk.js": "/planmytrip/static/js/453.d855a71b.chunk.js",
-    "index.html": "/planmytrip/index.html",
-    "main.e955d34d.css.map": "/planmytrip/static/css/main.e955d34d.css.map",
-    "main.d28d8ccf.js.map": "/planmytrip/static/js/main.d28d8ccf.js.map",
-    "453.d855a71b.chunk.js.map": "/planmytrip/static/js/453.d855a71b.chunk.js.map"
+    "main.css": "/static/css/main.e955d34d.css",
+    "main.js": "/static/js/main.8ec93c78.js",
+    "static/js/453.d855a71b.chunk.js": "/static/js/453.d855a71b.chunk.js",
+    "index.html": "/index.html",
+    "main.e955d34d.css.map": "/static/css/main.e955d34d.css.map",
+    "main.8ec93c78.js.map": "/static/js/main.8ec93c78.js.map",
+    "453.d855a71b.chunk.js.map": "/static/js/453.d855a71b.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.e955d34d.css",
-    "static/js/main.d28d8ccf.js"
+    "static/js/main.8ec93c78.js"
   ]
 }
