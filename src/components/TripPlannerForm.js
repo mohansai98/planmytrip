@@ -97,16 +97,34 @@ const TripPlannerForm = ({ onSubmit, API_KEY }) => {
         </div>
         <div>
           <label className="block text-sm font-medium text-green-800 mb-1">Date Range</label>
-          <DateRange
-            editableDateInputs={true}
-            onChange={handleDateChange}
-            moveRangeOnFirstSelection={false}
-            ranges={formData.dateRange}
-            className="border rounded-md bg-green-50"
-            color="#22c55e"
-            rangeColors={["#22c55e", "#15803d", "#166534"]}
-            required
-          />
+          <div className="w-full overflow-hidden">
+            <style jsx>{`
+              .rdrDateRangeWrapper {
+                width: 100% !important;
+              }
+              .rdrMonth {
+                width: 100% !important;
+              }
+              @media (min-width: 768px) {
+                .rdrDateRangeWrapper {
+                  width: auto !important;
+                }
+                .rdrMonth {
+                  width: 280px !important;
+                }
+              }
+            `}</style>
+            <DateRange
+              editableDateInputs={true}
+              onChange={handleDateChange}
+              moveRangeOnFirstSelection={false}
+              ranges={formData.dateRange}
+              className="border rounded-md bg-green-50"
+              color="#22c55e"
+              rangeColors={["#22c55e", "#15803d", "#166534"]}
+              required
+            />
+          </div>
         </div>
         <button 
           type="submit" 
