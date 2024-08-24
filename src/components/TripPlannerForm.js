@@ -78,7 +78,7 @@ const TripPlannerForm = ({ onSubmit, API_KEY }) => {
 
   return (
     <APIProvider apiKey={API_KEY}>
-      <form onSubmit={handleSubmit} className="space-y-6 bg-gradient-to-r from-green-100 to-blue-100 p-6 rounded-lg shadow-md">
+      <form onSubmit={handleSubmit} className="space-y-6 bg-gradient-to-r from-green-100 to-emerald-100 p-6 rounded-lg shadow-md">
         <div className="flex flex-col md:flex-row gap-4">
           <div className="flex-1">
             <label htmlFor="source" className="block text-sm font-medium text-green-800 mb-1">Source</label>

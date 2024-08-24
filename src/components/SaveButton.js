@@ -47,7 +47,7 @@ const SaveButton = ({ itinerary, formData, setAlert }) => {
         <div className="relative">
             <button
                 onClick={handleSave}
-                className="p-2 bg-green-500 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 transition duration-200 flex items-center"
+                className="p-2 bg-green-600 text-white rounded-md hover:bg-emerald-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 transition duration-200 flex items-center"
                 title="Save Itinerary"
             >
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="size-5">

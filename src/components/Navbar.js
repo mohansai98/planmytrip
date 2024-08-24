@@ -18,7 +18,7 @@ const Navbar = () => {
     };
 
     return (
-        <nav className="bg-gradient-to-r from-green-600 via-teal-500 to-blue-600 p-4 shadow-md">
+        <nav className="bg-gradient-to-r from-green-600 to-emerald-600 p-4 shadow-md">
             <div className="container mx-auto">
                 <div className="flex justify-between items-center">
                     <Link to="/" onClick={handleItineraryPlannerClick} className="text-white font-bold text-xl">
