@@ -1,4 +1,3 @@
-// components/Alert.js
 import React from 'react';
 
 const Alert = ({ message, onClose, type }) => {
@@ -17,11 +16,11 @@ const Alert = ({ message, onClose, type }) => {
             <span>{message}</span>
             <button
                 type="button"
-                className="ml-4 p-1 rounded-full hover:bg-gray-200"
+                className="ml-4 p-1 rounded-full hover:bg-green-200 transition duration-200"
                 onClick={onClose}
             >
                 <svg
-                    className="w-5 h-5 text-gray-600"
+                    className="w-5 h-5 text-green-600"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"

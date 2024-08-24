@@ -94,8 +94,8 @@ const ItineraryPlanner = () => {
 
   if (!itinerary) {
     return (
-      <div className="container mx-auto p-4">
-        <h1 className="text-3xl font-bold text-center mb-8">Plan Your Itinerary</h1>
+      <div className="container mx-auto p-4 bg-stone-50">
+        <h1 className="text-3xl font-bold text-center mb-8 text-stone-800">Plan Your Trip</h1>
         <div className="max-w-2xl mx-auto">
           <TripPlannerForm onSubmit={handleFormSubmit} API_KEY={API_KEY} />
         </div>
@@ -104,7 +104,7 @@ const ItineraryPlanner = () => {
   }
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto p-4 bg-stone-50">
       {alert.message && (
         <Alert
           message={alert.message}
@@ -114,7 +114,7 @@ const ItineraryPlanner = () => {
       )}
       {isLoading && <LoadingOverlay />}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 space-y-4 md:space-y-0">
-        <h1 className="text-xl md:text-2xl font-bold">Your Itinerary</h1>
+        <h1 className="text-xl md:text-2xl font-bold text-stone-800">Your Itinerary</h1>
         <div className="flex space-x-2">
           <RegenerateButton onRegenerate={handleRegenerate} />
           <SaveButton itinerary={itinerary} formData={formData} setAlert={setAlert} />
@@ -133,10 +133,11 @@ const ItineraryPlanner = () => {
             {itinerary.map((day, index) => (
               <button
                 key={index}
-                className={`px-4 py-2 whitespace-nowrap rounded-md mr-2 ${selectedDay === index
-                  ? 'bg-blue-500 text-white'
-                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                  }`}
+                className={`px-4 py-2 whitespace-nowrap rounded-md mr-2 ${
+                  selectedDay === index
+                    ? 'bg-green-600 text-white'
+                    : 'bg-stone-200 text-stone-800 hover:bg-stone-300'
+                }`}
                 onClick={() => handleDayClick(index)}
               >
                 Day {day.day}
@@ -147,16 +148,17 @@ const ItineraryPlanner = () => {
             {itinerary[selectedDay]?.activities?.map((activity, index) => (
               <div
                 key={index}
-                className={`p-4 border rounded-md cursor-pointer transition duration-200 ${selectedActivity === activity
-                  ? 'bg-blue-100 border-blue-500'
-                  : 'bg-white hover:bg-gray-50'
-                  }`}
+                className={`p-4 border rounded-md cursor-pointer transition duration-200 ${
+                  selectedActivity === activity
+                    ? 'bg-green-50 border-green-500'
+                    : 'bg-white hover:bg-stone-50'
+                }`}
                 onClick={() => handleActivityClick(activity)}
               >
-                <h3 className="font-bold">{activity.name}</h3>
-                <p className="text-sm text-gray-600">{activity.description}</p>
-                <p className="text-sm font-semibold mt-2">{activity.location}</p>
-                <p className="text-sm text-gray-500 mt-2">
+                <h3 className="font-bold text-stone-800">{activity.name}</h3>
+                <p className="text-sm text-stone-600">{activity.description}</p>
+                <p className="text-sm font-semibold mt-2 text-stone-700">{activity.location}</p>
+                <p className="text-sm text-green-600 mt-2">
                   Duration: {activity.duration} {activity.duration > 1 ? "hours" : "hour"}
                 </p>
               </div>
@@ -182,8 +184,8 @@ const ItineraryPlanner = () => {
                   onClick={() => handleMarkerClick(activity)}
                 >
                   <Pin
-                    background={selectedActivity === activity ? '#3B82F6' : '#22C55E'}
-                    borderColor={selectedActivity === activity ? '#1D4ED8' : '#065F46'}
+                    background={selectedActivity === activity ? '#16A34A' : '#22C55E'}
+                    borderColor={selectedActivity === activity ? '#15803D' : '#16A34A'}
                     glyphColor={'#FFFFFF'}
                     scale={selectedActivity === activity ? 1.2 : 1}
                   />
@@ -194,9 +196,9 @@ const ItineraryPlanner = () => {
                   position={openInfoWindow.coordinates}
                   onCloseClick={handleInfoWindowClose}
                 >
-                  <div className="p-2 max-w-xs">
-                    <h3 className="font-bold text-lg mb-1">{openInfoWindow.name}</h3>
-                    <p className="text-sm mb-2">{openInfoWindow.description}</p>
+                  <div className="p-2 max-w-xs bg-stone-50">
+                    <h3 className="font-bold text-lg mb-1 text-stone-800">{openInfoWindow.name}</h3>
+                    <p className="text-sm mb-2 text-stone-600">{openInfoWindow.description}</p>
                   </div>
                 </InfoWindow>
               )}

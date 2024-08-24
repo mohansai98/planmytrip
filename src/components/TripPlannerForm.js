@@ -29,7 +29,7 @@ const PlacesAutocomplete = ({ onPlaceSelect, placeholder }) => {
       ref={inputRef}
       type="text"
       placeholder={placeholder}
-      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+      className="w-full px-4 py-2 border border-green-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent bg-green-50 text-green-800"
       required
     />
   );
@@ -78,17 +78,17 @@ const TripPlannerForm = ({ onSubmit, API_KEY }) => {
 
   return (
     <APIProvider apiKey={API_KEY}>
-      <form onSubmit={handleSubmit} className="space-y-6 bg-white p-6 rounded-lg shadow-md">
+      <form onSubmit={handleSubmit} className="space-y-6 bg-gradient-to-r from-green-100 to-blue-100 p-6 rounded-lg shadow-md">
         <div className="flex flex-col md:flex-row gap-4">
           <div className="flex-1">
-            <label htmlFor="source" className="block text-sm font-medium text-gray-700 mb-1">Source</label>
+            <label htmlFor="source" className="block text-sm font-medium text-green-800 mb-1">Source</label>
             <PlacesAutocomplete
               onPlaceSelect={(place) => handlePlaceSelect(place, 'source')}
               placeholder="Enter source location"
             />
           </div>
           <div className="flex-1">
-            <label htmlFor="destination" className="block text-sm font-medium text-gray-700 mb-1">Destination</label>
+            <label htmlFor="destination" className="block text-sm font-medium text-green-800 mb-1">Destination</label>
             <PlacesAutocomplete
               onPlaceSelect={(place) => handlePlaceSelect(place, 'destination')}
               placeholder="Enter destination location"
@@ -96,19 +96,21 @@ const TripPlannerForm = ({ onSubmit, API_KEY }) => {
           </div>
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Date Range</label>
+          <label className="block text-sm font-medium text-green-800 mb-1">Date Range</label>
           <DateRange
             editableDateInputs={true}
             onChange={handleDateChange}
             moveRangeOnFirstSelection={false}
             ranges={formData.dateRange}
-            className="border rounded-md"
+            className="border rounded-md bg-green-50"
+            color="#22c55e"
+            rangeColors={["#22c55e", "#15803d", "#166534"]}
             required
           />
         </div>
         <button 
           type="submit" 
-          className="w-full px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
           disabled={isSubmitting}
         >
           {isSubmitting ? 'Planning...' : 'Plan Itinerary'}

@@ -7,7 +7,7 @@ const TripDashboard = ({ source, destination, fromDate, toDate }) => {
   };
 
   return (
-    <div className="bg-[#2C3E50] p-6 rounded-lg shadow-lg text-white mb-6">
+    <div className="bg-gradient-to-r from-green-400 to-emerald-400 p-6 rounded-lg shadow-lg mb-6">
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         <div className="sm:col-span-2 md:col-span-2 bg-white/20 p-4 rounded-md backdrop-blur-sm">
           <div className="flex items-center justify-between">

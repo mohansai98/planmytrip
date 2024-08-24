@@ -56,48 +56,48 @@ const ResetPassword = () => {
             )}
 
             <div className="container mx-auto p-4 flex justify-center">
-                <div className="max-w-md w-full bg-white rounded-lg shadow-md p-6">
+                <div className="max-w-md w-full bg-stone-50 rounded-lg shadow-md p-6">
                     <h2 className="text-2xl font-bold mb-4">Reset Password</h2>
                     <form onSubmit={handleResetPassword}>
                         <div className="mb-4">
-                            <label className="block text-gray-700 text-sm font-bold mb-2">
+                            <label className="block text-sm font-bold mb-2">
                                 Code
                             </label>
                             <input
                                 type="text"
                                 value={code}
                                 onChange={(e) => setCode(e.target.value)}
-                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                className="shadow appearance-none border rounded w-full py-2 px-3 text-green-700 leading-tight focus:outline-none focus:shadow-outline focus:border-green-500"
                                 required
                             />
                         </div>
                         <div className="mb-4">
-                            <label className="block text-gray-700 text-sm font-bold mb-2">
+                            <label className="block text-sm font-bold mb-2">
                                 New Password
                             </label>
                             <input
                                 type="password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                className="shadow appearance-none border rounded w-full py-2 px-3 text-green-700 leading-tight focus:outline-none focus:shadow-outline focus:border-green-500"
                                 required
                             />
                         </div>
                         <div className="mb-4">
-                            <label className="block text-gray-700 text-sm font-bold mb-2">
+                            <label className="block text-sm font-bold mb-2">
                                 Confirm Password
                             </label>
                             <input
                                 type="password"
                                 value={confirmPassword}
                                 onChange={(e) => setConfirmPassword(e.target.value)}
-                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                className="shadow appearance-none border rounded w-full py-2 px-3 text-green-700 leading-tight focus:outline-none focus:shadow-outline focus:border-green-500"
                                 required
                             />
                         </div>
                         <button
                             type="submit"
-                            className="bg-blue-500 text-white px-4 py-2 rounded-md w-full hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="bg-green-600 text-white px-4 py-2 rounded-md w-full hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                             disabled={isLoading}
                         >
                             {isLoading ? 'Resetting...' : 'Reset Password'}

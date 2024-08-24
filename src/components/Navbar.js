@@ -18,7 +18,7 @@ const Navbar = () => {
     };
 
     return (
-        <nav className="bg-blue-600 p-4 shadow-md">
+        <nav className="bg-gradient-to-r from-green-600 via-teal-500 to-blue-600 p-4 shadow-md">
             <div className="container mx-auto">
                 <div className="flex justify-between items-center">
                     <Link to="/" onClick={handleItineraryPlannerClick} className="text-white font-bold text-xl">
@@ -27,14 +27,14 @@ const Navbar = () => {
                     <div className="hidden md:flex items-center space-x-4">
                         {user ? (
                             <>
-                                <Link to="/my-plans" className="text-white hover:text-blue-200 transition duration-200">My Plans</Link>
+                                <Link to="/my-plans" className="text-white hover:text-yellow-300 transition duration-200">My Plans</Link>
                                 <span className="text-white">Welcome, {name}</span>
                                 <LogoutButton />
                             </>
                         ) : (
                             <>
-                                <Link to="/login" className="text-white hover:text-blue-200 transition duration-200">Login</Link>
-                                <Link to="/register" className="bg-white text-blue-600 px-4 py-2 rounded-md hover:bg-blue-100 transition duration-200">Register</Link>
+                                <Link to="/login" className="text-white hover:text-yellow-300 transition duration-200">Login</Link>
+                                <Link to="/register" className="bg-yellow-500 text-green-800 px-4 py-2 rounded-md hover:bg-yellow-600 transition duration-200">Register</Link>
                             </>
                         )}
                     </div>
@@ -68,6 +68,8 @@ const Navbar = () => {
                 )}
             </div>
         </nav>
+
+
     );
 };
 

@@ -16,7 +16,7 @@ function App() {
     <Router>
       <AuthProvider>
         <ItineraryProvider>
-          <div className="flex flex-col min-h-screen bg-gray-100">
+          <div className="flex flex-col min-h-screen bg-gradient-to-b from-green-50 to-blue-50">
             <Navbar />
             <main className="flex-grow container mx-auto p-4">
               <Routes>
@@ -35,5 +35,6 @@ function App() {
     </Router>
   );
 }
+
 
 export default App;
