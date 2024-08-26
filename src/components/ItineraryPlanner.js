@@ -34,7 +34,7 @@ const ItineraryPlanner = () => {
       const responseData = await response.json();
       setItinerary(responseData.itinerary);
     } catch (error) {
-      console.error('Error fetching itinerary:', error);
+      setAlert({ message: 'Error fetching itinerary.', type: 'error' });
     } finally {
       setIsLoading(false);
     }
@@ -95,6 +95,13 @@ const ItineraryPlanner = () => {
   if (!itinerary) {
     return (
       <div className="container mx-auto p-4 bg-stone-50">
+        {alert.message && (
+          <Alert
+            message={alert.message}
+            type={alert.type}
+            onClose={() => setAlert({ message: '', type: '' })}
+          />
+        )}
         <h1 className="text-3xl font-bold text-center mb-8 text-stone-800">Plan Your Trip</h1>
         <div className="max-w-2xl mx-auto">
           <TripPlannerForm onSubmit={handleFormSubmit} API_KEY={API_KEY} />
@@ -133,11 +140,10 @@ const ItineraryPlanner = () => {
             {itinerary.map((day, index) => (
               <button
                 key={index}
-                className={`px-4 py-2 whitespace-nowrap rounded-md mr-2 ${
-                  selectedDay === index
+                className={`px-4 py-2 whitespace-nowrap rounded-md mr-2 ${selectedDay === index
                     ? 'bg-green-600 text-white'
                     : 'bg-stone-200 text-stone-800 hover:bg-stone-300'
-                }`}
+                  }`}
                 onClick={() => handleDayClick(index)}
               >
                 Day {day.day}
@@ -148,11 +154,10 @@ const ItineraryPlanner = () => {
             {itinerary[selectedDay]?.activities?.map((activity, index) => (
               <div
                 key={index}
-                className={`p-4 border rounded-md cursor-pointer transition duration-200 ${
-                  selectedActivity === activity
+                className={`p-4 border rounded-md cursor-pointer transition duration-200 ${selectedActivity === activity
                     ? 'bg-green-50 border-green-500'
                     : 'bg-white hover:bg-stone-50'
-                }`}
+                  }`}
                 onClick={() => handleActivityClick(activity)}
               >
                 <h3 className="font-bold text-stone-800">{activity.name}</h3>
