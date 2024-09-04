@@ -35,7 +35,7 @@ const LoginForm = () => {
       const data = await response.json();
       if (response.ok) {
         login(data.token, data.name);
-        navigate('/');
+        navigate('/plan');
       } else {
         setAlert({ message: data.message || 'Login failed, please try again.', type: 'error' });
       }
