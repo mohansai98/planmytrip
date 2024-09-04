@@ -1,4 +1,5 @@
 import React from 'react';
+import { X } from 'lucide-react';
 
 const Alert = ({ message, onClose, type }) => {
     const alertStyles = {
@@ -10,29 +11,16 @@ const Alert = ({ message, onClose, type }) => {
 
     return (
         <div
-            className={`p-4 mb-4 border rounded-md ${alertStyles[type]} flex items-center justify-between`}
+            className={`p-4 mb-4 border rounded-lg ${alertStyles[type]} flex items-center justify-between shadow-md`}
             role="alert"
         >
-            <span>{message}</span>
+            <span className="text-sm font-medium">{message}</span>
             <button
                 type="button"
-                className="ml-4 p-1 rounded-full hover:bg-green-200 transition duration-200"
+                className="ml-4 p-1 rounded-full hover:bg-opacity-20 hover:bg-gray-600 transition duration-200"
                 onClick={onClose}
             >
-                <svg
-                    className="w-5 h-5 text-green-600"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                >
-                    <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M6 18L18 6M6 6l12 12"
-                    />
-                </svg>
+                <X className="w-5 h-5" />
             </button>
         </div>
     );

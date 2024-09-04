@@ -7,6 +7,7 @@ import LoadingOverlay from './LoadingOverlay';
 import { useItinerary } from './ItineraryContext';
 import Alert from './Alert';
 import TripDashboard from './TripDashboard';
+import { MapPin, Clock } from 'lucide-react';
 
 const API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
 const API_URL = process.env.REACT_APP_API_URL;
@@ -55,7 +56,7 @@ const ItineraryPlanner = () => {
   const handleActivityClick = (activity) => {
     setSelectedActivity(activity);
     setOpenInfoWindow(activity);
-    setMapZoom(12);
+    setMapZoom(14);
   };
 
   const handleMarkerClick = (activity) => {
@@ -76,13 +77,11 @@ const ItineraryPlanner = () => {
     const zoom = e.detail?.zoom;
     if (typeof zoom === 'number') {
       setMapZoom(zoom);
-    } else {
-      console.error('Zoom value is invalid:', zoom);
     }
   };
 
   const mapCenter = useCallback(() => {
-    if (!itinerary || !itinerary[selectedDay]) return { lat: 0, lng: 0 }; // Broad view of the world
+    if (!itinerary || !itinerary[selectedDay]) return { lat: 0, lng: 0 };
     if (selectedActivity) {
       return selectedActivity.coordinates || { lat: 0, lng: 0 };
     }
@@ -91,10 +90,9 @@ const ItineraryPlanner = () => {
     return activities[Math.floor(activities.length / 2)]?.coordinates || { lat: 0, lng: 0 };
   }, [selectedDay, selectedActivity, itinerary]);
 
-
   if (!itinerary) {
     return (
-      <div className="container mx-auto p-4 bg-stone-50">
+      <div className="container mx-auto p-4">
         {alert.message && (
           <Alert
             message={alert.message}
@@ -102,7 +100,7 @@ const ItineraryPlanner = () => {
             onClose={() => setAlert({ message: '', type: '' })}
           />
         )}
-        <h1 className="text-3xl font-bold text-center mb-8 text-stone-800">Plan Your Trip</h1>
+        <h1 className="text-3xl font-bold text-center mb-8 text-gray-800">Plan Your Trip</h1>
         <div className="max-w-2xl mx-auto">
           <TripPlannerForm onSubmit={handleFormSubmit} API_KEY={API_KEY} />
         </div>
@@ -111,7 +109,7 @@ const ItineraryPlanner = () => {
   }
 
   return (
-    <div className="container mx-auto p-4 bg-stone-50">
+    <div className="container mx-auto p-4">
       {alert.message && (
         <Alert
           message={alert.message}
@@ -121,7 +119,7 @@ const ItineraryPlanner = () => {
       )}
       {isLoading && <LoadingOverlay />}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 space-y-4 md:space-y-0">
-        <h1 className="text-xl md:text-2xl font-bold text-stone-800">Your Itinerary</h1>
+        <h1 className="text-2xl font-bold text-gray-800">Your Itinerary</h1>
         <div className="flex space-x-2">
           <RegenerateButton onRegenerate={handleRegenerate} />
           <SaveButton itinerary={itinerary} formData={formData} setAlert={setAlert} />
@@ -134,16 +132,17 @@ const ItineraryPlanner = () => {
         fromDate={formData.fromDate}
         toDate={formData.toDate}
       />
-      <div className="flex flex-col lg:flex-row gap-6 flex-grow">
+      <div className="flex flex-col lg:flex-row gap-6 mt-6">
         <div className="w-full lg:w-1/3 flex flex-col">
           <div className="flex mb-4 overflow-x-auto pb-2">
             {itinerary.map((day, index) => (
               <button
                 key={index}
-                className={`px-4 py-2 whitespace-nowrap rounded-md mr-2 ${selectedDay === index
-                    ? 'bg-green-600 text-white'
-                    : 'bg-stone-200 text-stone-800 hover:bg-stone-300'
-                  }`}
+                className={`px-4 py-2 whitespace-nowrap rounded-md mr-2 ${
+                  selectedDay === index
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-gray-200 text-gray-800 hover:bg-gray-300'
+                }`}
                 onClick={() => handleDayClick(index)}
               >
                 Day {day.day}
@@ -154,18 +153,23 @@ const ItineraryPlanner = () => {
             {itinerary[selectedDay]?.activities?.map((activity, index) => (
               <div
                 key={index}
-                className={`p-4 border rounded-md cursor-pointer transition duration-200 ${selectedActivity === activity
-                    ? 'bg-green-50 border-green-500'
-                    : 'bg-white hover:bg-stone-50'
-                  }`}
+                className={`p-4 border rounded-md cursor-pointer transition duration-200 ${
+                  selectedActivity === activity
+                    ? 'bg-blue-50 border-blue-500'
+                    : 'bg-white hover:bg-gray-50'
+                }`}
                 onClick={() => handleActivityClick(activity)}
               >
-                <h3 className="font-bold text-stone-800">{activity.name}</h3>
-                <p className="text-sm text-stone-600">{activity.description}</p>
-                <p className="text-sm font-semibold mt-2 text-stone-700">{activity.location}</p>
-                <p className="text-sm text-green-600 mt-2">
-                  Duration: {activity.duration} {activity.duration > 1 ? "hours" : "hour"}
-                </p>
+                <h3 className="font-bold text-gray-800">{activity.name}</h3>
+                <p className="text-sm text-gray-600 mt-1">{activity.description}</p>
+                <div className="flex items-center mt-2 text-sm text-gray-700">
+                  <MapPin size={16} className="mr-1" />
+                  <span>{activity.location}</span>
+                </div>
+                <div className="flex items-center mt-1 text-sm text-gray-700">
+                  <Clock size={16} className="mr-1" />
+                  <span>Duration: {activity.duration} {activity.duration > 1 ? "hours" : "hour"}</span>
+                </div>
               </div>
             ))}
           </div>
@@ -179,7 +183,7 @@ const ItineraryPlanner = () => {
               disableDefaultUI={false}
               mapId={'19eb6e4a799c5279'}
               onClick={handleMapClick}
-              onZoomChanged={(e) => handleZoomChanged(e)}
+              onZoomChanged={handleZoomChanged}
               className="w-full h-full rounded-lg shadow-md"
             >
               {itinerary[selectedDay]?.activities?.map((activity, index) => (
@@ -189,8 +193,8 @@ const ItineraryPlanner = () => {
                   onClick={() => handleMarkerClick(activity)}
                 >
                   <Pin
-                    background={selectedActivity === activity ? '#16A34A' : '#22C55E'}
-                    borderColor={selectedActivity === activity ? '#15803D' : '#16A34A'}
+                    background={selectedActivity === activity ? '#2563EB' : '#3B82F6'}
+                    borderColor={selectedActivity === activity ? '#1D4ED8' : '#2563EB'}
                     glyphColor={'#FFFFFF'}
                     scale={selectedActivity === activity ? 1.2 : 1}
                   />
@@ -201,9 +205,9 @@ const ItineraryPlanner = () => {
                   position={openInfoWindow.coordinates}
                   onCloseClick={handleInfoWindowClose}
                 >
-                  <div className="p-2 max-w-xs bg-stone-50">
-                    <h3 className="font-bold text-lg mb-1 text-stone-800">{openInfoWindow.name}</h3>
-                    <p className="text-sm mb-2 text-stone-600">{openInfoWindow.description}</p>
+                  <div className="p-2 max-w-xs bg-white">
+                    <h3 className="font-bold text-lg mb-1 text-gray-800">{openInfoWindow.name}</h3>
+                    <p className="text-sm mb-2 text-gray-600">{openInfoWindow.description}</p>
                   </div>
                 </InfoWindow>
               )}

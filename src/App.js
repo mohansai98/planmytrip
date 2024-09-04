@@ -10,17 +10,19 @@ import ForgotPassword from './components/ForgotPassword';
 import ResetPassword from './components/ResetPassword';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import Home from './components/Home';
 
 function App() {
   return (
     <Router>
       <AuthProvider>
         <ItineraryProvider>
-          <div className="flex flex-col min-h-screen bg-gradient-to-b from-green-50 to-emerald-50">
+          <div className="flex flex-col min-h-screen bg-gray-50">
             <Navbar />
-            <main className="flex-grow container mx-auto p-4">
+            <main className="flex-grow container mx-auto px-4 py-8">
               <Routes>
-                <Route path="/" element={<ItineraryPlanner />} />
+                <Route path="/" element={<Home />} />
+                <Route path="/plan" element={<ItineraryPlanner />} />
                 <Route path="/login" element={<LoginForm />} />
                 <Route path="/register" element={<RegisterForm />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
@@ -35,6 +37,5 @@ function App() {
     </Router>
   );
 }
-
 
 export default App;

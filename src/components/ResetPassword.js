@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { Lock, Key, RefreshCw } from 'lucide-react';
 import Alert from './Alert';
+import LoadingOverlay from './LoadingOverlay';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -34,7 +36,7 @@ const ResetPassword = () => {
                 setAlert({ message: 'Password reset successfully.', type: 'success' });
                 setTimeout(() => {
                     navigate('/login');
-                }, 5000);
+                }, 2000);
             } else {
                 setAlert({ message: data.message || 'Failed to reset password, please try again.', type: 'error' });
             }
@@ -54,56 +56,87 @@ const ResetPassword = () => {
                     onClose={() => setAlert({ message: '', type: '' })}
                 />
             )}
+            {isLoading && <LoadingOverlay />}
+            <div className="sm:mx-auto sm:w-full sm:max-w-md">
+                <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">Reset Password</h2>
+            </div>
 
-            <div className="container mx-auto p-4 flex justify-center">
-                <div className="max-w-md w-full bg-stone-50 rounded-lg shadow-md p-6">
-                    <h2 className="text-2xl font-bold mb-4">Reset Password</h2>
-                    <form onSubmit={handleResetPassword}>
-                        <div className="mb-4">
-                            <label className="block text-sm font-bold mb-2">
-                                Code
-                            </label>
+            <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+                <form onSubmit={handleResetPassword} className="space-y-6 bg-white p-6 rounded-lg shadow-md">
+                    <div>
+                        <label htmlFor="code" className="block text-sm font-medium text-gray-700 mb-1">
+                            Reset Code
+                        </label>
+                        <div className="relative">
+                            <Key className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
                             <input
+                                id="code"
+                                name="code"
                                 type="text"
+                                required
                                 value={code}
                                 onChange={(e) => setCode(e.target.value)}
-                                className="shadow appearance-none border rounded w-full py-2 px-3 text-green-700 leading-tight focus:outline-none focus:shadow-outline focus:border-green-500"
-                                required
+                                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                placeholder="Enter reset code"
                             />
                         </div>
-                        <div className="mb-4">
-                            <label className="block text-sm font-bold mb-2">
-                                New Password
-                            </label>
+                    </div>
+
+                    <div>
+                        <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+                            New Password
+                        </label>
+                        <div className="relative">
+                            <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
                             <input
+                                id="password"
+                                name="password"
                                 type="password"
+                                required
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                className="shadow appearance-none border rounded w-full py-2 px-3 text-green-700 leading-tight focus:outline-none focus:shadow-outline focus:border-green-500"
-                                required
+                                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                placeholder="Enter new password"
                             />
                         </div>
-                        <div className="mb-4">
-                            <label className="block text-sm font-bold mb-2">
-                                Confirm Password
-                            </label>
+                    </div>
+
+                    <div>
+                        <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">
+                            Confirm New Password
+                        </label>
+                        <div className="relative">
+                            <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
                             <input
+                                id="confirmPassword"
+                                name="confirmPassword"
                                 type="password"
+                                required
                                 value={confirmPassword}
                                 onChange={(e) => setConfirmPassword(e.target.value)}
-                                className="shadow appearance-none border rounded w-full py-2 px-3 text-green-700 leading-tight focus:outline-none focus:shadow-outline focus:border-green-500"
-                                required
+                                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                placeholder="Confirm new password"
                             />
                         </div>
+                    </div>
+
+                    <div>
                         <button
                             type="submit"
-                            className="bg-green-600 text-white px-4 py-2 rounded-md w-full hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="w-full flex justify-center items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                             disabled={isLoading}
                         >
-                            {isLoading ? 'Resetting...' : 'Reset Password'}
+                            {isLoading ? (
+                                'Resetting...'
+                            ) : (
+                                <>
+                                    <RefreshCw className="mr-2 h-5 w-5" aria-hidden="true" />
+                                    Reset Password
+                                </>
+                            )}
                         </button>
-                    </form>
-                </div>
+                    </div>
+                </form>
             </div>
         </div>
     );

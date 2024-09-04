@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useItinerary } from './ItineraryContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
+import { Eye, Trash2, MapPin, Calendar } from 'lucide-react';
 import Alert from './Alert';
 import LoadingOverlay from './LoadingOverlay';
 import ConfirmationModal from './ConfirmationModal';
@@ -64,7 +65,7 @@ const MyPlans = () => {
             destination: itinerary.destination,
             fromDate: itinerary.fromDate,
             toDate: itinerary.toDate,
-          });
+        });
         setItinerary(itinerary.itinerary);
         navigate('/');
     };
@@ -100,8 +101,8 @@ const MyPlans = () => {
     };
 
     return (
-        <div className="bg-gradient-to-b from-green-50 to-blue-50 min-h-screen p-4">
-            <div className="container mx-auto p-4">
+        <div>
+            <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 {alert.message && (
                     <Alert
                         message={alert.message}
@@ -110,31 +111,52 @@ const MyPlans = () => {
                     />
                 )}
                 {isLoading && <LoadingOverlay />}
-                <h1 className="text-3xl font-bold mb-6 text-center">My Plans</h1>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {userItineraries.length === 0 && "No itineraries found."}
-                    {userItineraries.map((itinerary, index) => (
-                        <div key={index} className="border p-4 rounded shadow-md bg-white">
-                            <h3 className="text-xl font-semibold mb-2">{itinerary.source} to {itinerary.destination}</h3>
-                            <p><strong>From:</strong> {itinerary.fromDate}</p>
-                            <p><strong>To:</strong> {itinerary.toDate}</p>
-                            <div className="mt-4 flex space-x-4">
-                                <button
-                                    onClick={() => handleViewItinerary(itinerary)}
-                                    className="border border-green-500 text-green-500 py-2 px-4 rounded hover:bg-green-500 hover:text-white transition duration-300"
-                                >
-                                    View Itinerary
-                                </button>
-                                <button
-                                    onClick={() => confirmDeleteItinerary(itinerary.id)}
-                                    className="border border-yellow-500 text-yellow-500 py-2 px-4 rounded hover:bg-yellow-500 hover:text-white transition duration-300"
-                                >
-                                    Delete Itinerary
-                                </button>
+                <h1 className="text-3xl font-bold mb-6 text-gray-900">My Plans</h1>
+                {userItineraries.length === 0 ? (
+                    <div className="bg-white p-6 rounded-lg shadow-md text-center">
+                        <p className="text-gray-600">No itineraries found. Start planning your trip now!</p>
+                        <Link to="/plan" className="inline-block mt-4 px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out">
+                            Create a Plan
+                        </Link>
+                    </div>
+                ) : (
+                    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                        {userItineraries.map((itinerary, index) => (
+                            <div key={index} className="bg-white overflow-hidden shadow-md rounded-lg transition duration-300 hover:shadow-lg">
+                                <div className="px-4 py-5 sm:p-6">
+                                    <div className="mb-2 flex items-center text-sm">
+                                        <MapPin className="h-5 w-5 mr-2 text-blue-500" aria-hidden="true" />
+                                        <p className="text-sm text-gray-600">From: <span className="font-medium text-gray-800">{itinerary.source}</span></p>
+                                    </div>
+                                    <div className="mb-4 flex items-center text-sm">
+                                        <MapPin className="h-5 w-5 mr-2 text-blue-500" aria-hidden="true" />
+                                        <p className="text-sm text-gray-600">To: <span className="font-medium text-gray-800">{itinerary.destination}</span></p>
+                                    </div>
+                                    <div className="mb-4 flex items-center text-sm text-gray-500">
+                                        <Calendar className="h-5 w-5 mr-2" aria-hidden="true" />
+                                        <span>{itinerary.fromDate} - {itinerary.toDate}</span>
+                                    </div>
+                                    <div className="flex justify-between items-center mt-4">
+                                        <button
+                                            onClick={() => handleViewItinerary(itinerary)}
+                                            className="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out"
+                                        >
+                                            <Eye className="mr-2 h-4 w-4" aria-hidden="true" />
+                                            View Itinerary
+                                        </button>
+                                        <button
+                                            onClick={() => confirmDeleteItinerary(itinerary.id)}
+                                            className="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition duration-150 ease-in-out"
+                                        >
+                                            <Trash2 className="mr-2 h-4 w-4" aria-hidden="true" />
+                                            Delete
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    ))}
-                </div>
+                        ))}
+                    </div>
+                )}
             </div>
 
             <ConfirmationModal

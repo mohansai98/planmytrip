@@ -1,8 +1,9 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { APIProvider, useMapsLibrary } from '@vis.gl/react-google-maps';
 import { DateRange } from 'react-date-range';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
+import { MapPin, Calendar, X } from 'lucide-react';
 
 const PlacesAutocomplete = ({ onPlaceSelect, placeholder }) => {
   const inputRef = useRef(null);
@@ -25,13 +26,16 @@ const PlacesAutocomplete = ({ onPlaceSelect, placeholder }) => {
   }, [placesLibrary, onPlaceSelect]);
 
   return (
-    <input
-      ref={inputRef}
-      type="text"
-      placeholder={placeholder}
-      className="w-full px-4 py-2 border border-green-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent bg-green-50 text-green-800"
-      required
-    />
+    <div className="relative">
+      <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+      <input
+        ref={inputRef}
+        type="text"
+        placeholder={placeholder}
+        className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        required
+      />
+    </div>
   );
 };
 
@@ -40,12 +44,14 @@ const TripPlannerForm = ({ onSubmit, API_KEY }) => {
     source: '',
     destination: '',
     dateRange: [{
-      startDate: new Date(),
-      endDate: new Date(),
+      startDate: null,
+      endDate: null,
       key: 'selection'
     }]
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const datePickerRef = useRef(null);
 
   const handlePlaceSelect = (place, field) => {
     setFormData(prev => ({
@@ -59,6 +65,9 @@ const TripPlannerForm = ({ onSubmit, API_KEY }) => {
       ...prev,
       dateRange: [item.selection]
     }));
+    if (item.selection.startDate && item.selection.endDate) {
+      setShowDatePicker(false);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -68,27 +77,60 @@ const TripPlannerForm = ({ onSubmit, API_KEY }) => {
       await onSubmit({
         source: formData.source,
         destination: formData.destination,
-        fromDate: formData.dateRange[0].startDate.toISOString().split('T')[0],
-        toDate: formData.dateRange[0].endDate.toISOString().split('T')[0]
+        fromDate: formData.dateRange[0].startDate ? formData.dateRange[0].startDate.toISOString().split('T')[0] : null,
+        toDate: formData.dateRange[0].endDate ? formData.dateRange[0].endDate.toISOString().split('T')[0] : null
       });
     } finally {
       setIsSubmitting(false);
     }
   };
 
+  const formatDateRange = () => {
+    const start = formData.dateRange[0].startDate;
+    const end = formData.dateRange[0].endDate;
+    if (start && end) {
+      return `${start.toLocaleDateString()} - ${end.toLocaleDateString()}`;
+    }
+    return '';
+  };
+
+  const clearDateRange = () => {
+    setFormData(prev => ({
+      ...prev,
+      dateRange: [{
+        startDate: null,
+        endDate: null,
+        key: 'selection'
+      }]
+    }));
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (datePickerRef.current && !datePickerRef.current.contains(event.target)) {
+        setShowDatePicker(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   return (
     <APIProvider apiKey={API_KEY}>
-      <form onSubmit={handleSubmit} className="space-y-6 bg-gradient-to-r from-green-100 to-emerald-100 p-6 rounded-lg shadow-md">
-        <div className="flex flex-col md:flex-row gap-4">
-          <div className="flex-1">
-            <label htmlFor="source" className="block text-sm font-medium text-green-800 mb-1">Source</label>
+      <form onSubmit={handleSubmit} className="space-y-6 bg-white p-6 rounded-lg shadow-md max-w-md mx-auto">
+        <div className="space-y-4">
+          <div>
+            <label htmlFor="source" className="block text-sm font-medium text-gray-700 mb-1">From</label>
             <PlacesAutocomplete
               onPlaceSelect={(place) => handlePlaceSelect(place, 'source')}
               placeholder="Enter source location"
             />
           </div>
-          <div className="flex-1">
-            <label htmlFor="destination" className="block text-sm font-medium text-green-800 mb-1">Destination</label>
+          <div>
+            <label htmlFor="destination" className="block text-sm font-medium text-gray-700 mb-1">To</label>
             <PlacesAutocomplete
               onPlaceSelect={(place) => handlePlaceSelect(place, 'destination')}
               placeholder="Enter destination location"
@@ -96,42 +138,45 @@ const TripPlannerForm = ({ onSubmit, API_KEY }) => {
           </div>
         </div>
         <div>
-          <label className="block text-sm font-medium text-green-800 mb-1">Date Range</label>
-          <div className="w-full overflow-hidden">
-            <style jsx>{`
-              .rdrDateRangeWrapper {
-                width: 100% !important;
-              }
-              .rdrMonth {
-                width: 100% !important;
-              }
-              @media (min-width: 768px) {
-                .rdrDateRangeWrapper {
-                  width: auto !important;
-                }
-                .rdrMonth {
-                  width: 280px !important;
-                }
-              }
-            `}</style>
-            <DateRange
-              editableDateInputs={true}
-              onChange={handleDateChange}
-              moveRangeOnFirstSelection={false}
-              ranges={formData.dateRange}
-              className="border rounded-md bg-green-50"
-              color="#22c55e"
-              rangeColors={["#22c55e", "#15803d", "#166534"]}
-              required
+          <label className="block text-sm font-medium text-gray-700 mb-1">Date Range</label>
+          <div className="relative">
+            <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+            <input
+              type="text"
+              value={formatDateRange()}
+              onClick={() => setShowDatePicker(!showDatePicker)}
+              className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer"
+              readOnly
+              placeholder="Select date range"
             />
+            {formData.dateRange[0].startDate && (
+              <button
+                type="button"
+                onClick={clearDateRange}
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+              >
+                <X size={18} />
+              </button>
+            )}
           </div>
+          {showDatePicker && (
+            <div className="absolute z-10 mt-2" ref={datePickerRef}>
+              <DateRange
+                editableDateInputs={true}
+                onChange={handleDateChange}
+                moveRangeOnFirstSelection={false}
+                ranges={formData.dateRange}
+                className="border rounded-md shadow-lg"
+              />
+            </div>
+          )}
         </div>
         <button 
           type="submit" 
-          className="w-full px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
           disabled={isSubmitting}
         >
-          {isSubmitting ? 'Planning...' : 'Plan Itinerary'}
+          {isSubmitting ? 'Planning...' : 'Plan Your Trip'}
         </button>
       </form>
     </APIProvider>

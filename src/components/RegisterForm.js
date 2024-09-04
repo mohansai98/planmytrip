@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { User, Mail, Lock, UserPlus } from 'lucide-react';
 import Alert from './Alert';
+import LoadingOverlay from './LoadingOverlay';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -53,67 +55,94 @@ const RegisterForm = () => {
                     onClose={() => setAlert({ message: '', type: '' })}
                 />
             )}
-            <div className="container mx-auto p-4 flex justify-center">
-                <div className="max-w-md w-full bg-stone-50 rounded-lg shadow-md p-6">
-                    <h2 className="text-2xl font-bold mb-4 text-stone-800">Register</h2>
-                    <form onSubmit={handleRegister}>
-                        <div className="mb-4">
-                            <label className="block text-stone-700 text-sm font-bold mb-2">
-                                Name
-                            </label>
+            {isLoading && <LoadingOverlay />}
+            <div className="sm:mx-auto sm:w-full sm:max-w-md">
+                <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">Create your account</h2>
+            </div>
+
+            <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+                <form onSubmit={handleRegister} className="space-y-6 bg-white p-6 rounded-lg shadow-md">
+                    <div>
+                        <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+                            Name
+                        </label>
+                        <div className="relative">
+                            <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
                             <input
+                                id="name"
                                 type="text"
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
-                                className="shadow appearance-none border rounded w-full py-2 px-3 text-stone-700 leading-tight focus:outline-none focus:shadow-outline focus:border-green-500"
+                                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                 required
                             />
                         </div>
-                        <div className="mb-4">
-                            <label className="block text-stone-700 text-sm font-bold mb-2">
-                                Email
-                            </label>
+                    </div>
+                    <div>
+                        <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                            Email
+                        </label>
+                        <div className="relative">
+                            <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
                             <input
+                                id="email"
                                 type="email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                className="shadow appearance-none border rounded w-full py-2 px-3 text-stone-700 leading-tight focus:outline-none focus:shadow-outline focus:border-green-500"
+                                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                 required
                             />
                         </div>
-                        <div className="mb-4">
-                            <label className="block text-stone-700 text-sm font-bold mb-2">
-                                Password
-                            </label>
+                    </div>
+                    <div>
+                        <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+                            Password
+                        </label>
+                        <div className="relative">
+                            <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
                             <input
+                                id="password"
                                 type="password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                className="shadow appearance-none border rounded w-full py-2 px-3 text-stone-700 leading-tight focus:outline-none focus:shadow-outline focus:border-green-500"
+                                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                 required
                             />
                         </div>
-                        <div className="mb-4">
-                            <label className="block text-stone-700 text-sm font-bold mb-2">
-                                Confirm Password
-                            </label>
+                    </div>
+                    <div>
+                        <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">
+                            Confirm Password
+                        </label>
+                        <div className="relative">
+                            <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
                             <input
+                                id="confirmPassword"
                                 type="password"
                                 value={confirmPassword}
                                 onChange={(e) => setConfirmPassword(e.target.value)}
-                                className="shadow appearance-none border rounded w-full py-2 px-3 text-stone-700 leading-tight focus:outline-none focus:shadow-outline focus:border-green-500"
+                                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                 required
                             />
                         </div>
+                    </div>
+                    <div>
                         <button
                             type="submit"
-                            className="bg-green-600 text-white px-4 py-2 rounded-md w-full hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="w-full flex justify-center items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                             disabled={isLoading}
                         >
-                            {isLoading ? 'Registering...' : 'Register'}
+                            {isLoading ? (
+                                'Registering...'
+                            ) : (
+                                <>
+                                    <UserPlus className="mr-2 h-5 w-5" aria-hidden="true" />
+                                    Register
+                                </>
+                            )}
                         </button>
-                    </form>
-                </div>
+                    </div>
+                </form>
             </div>
         </div>
     );

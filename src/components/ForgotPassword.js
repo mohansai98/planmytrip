@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Mail, ArrowRight } from 'lucide-react';
 import Alert from './Alert';
+import LoadingOverlay from './LoadingOverlay';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -46,32 +48,51 @@ const ForgotPassword = () => {
                     onClose={() => setAlert({ message: '', type: '' })}
                 />
             )}
-        <div className="container mx-auto p-4 flex justify-center">
-            <div className="max-w-md w-full bg-stone-50 rounded-lg shadow-md p-6">
-                <h2 className="text-2xl font-bold mb-4 text-stone-800">Forgot Password</h2>
-                <form onSubmit={handleRequestReset}>
-                    <div className="mb-4">
-                        <label className="block text-stone-700 text-sm font-bold mb-2">
-                            Email
+            {isLoading && <LoadingOverlay />}
+            <div className="sm:mx-auto sm:w-full sm:max-w-md">
+                <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">Forgot Password</h2>
+            </div>
+
+            <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+                <form onSubmit={handleRequestReset} className="space-y-6 bg-white p-6 rounded-lg shadow-md">
+                    <div>
+                        <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                            Email address
                         </label>
-                        <input
-                            type="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            className="shadow appearance-none border rounded w-full py-2 px-3 text-stone-700 leading-tight focus:outline-none focus:shadow-outline focus:border-green-500"
-                            required
-                        />
+                        <div className="relative">
+                            <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                            <input
+                                id="email"
+                                name="email"
+                                type="email"
+                                autoComplete="email"
+                                required
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                placeholder="you@example.com"
+                            />
+                        </div>
                     </div>
-                    <button
-                        type="submit"
-                        className="bg-green-600 text-white px-4 py-2 rounded-md w-full hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                        disabled={isLoading}
-                    >
-                        {isLoading ? 'Requesting...' : 'Request Reset'}
-                    </button>
+
+                    <div>
+                        <button
+                            type="submit"
+                            className="w-full flex justify-center items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                            disabled={isLoading}
+                        >
+                            {isLoading ? (
+                                'Sending...'
+                            ) : (
+                                <>
+                                    <ArrowRight className="mr-2 h-5 w-5" aria-hidden="true" />
+                                    Send Reset Code
+                                </>
+                            )}
+                        </button>
+                    </div>
                 </form>
             </div>
-        </div>
         </div>
     );
 };
