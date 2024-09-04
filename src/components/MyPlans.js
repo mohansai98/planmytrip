@@ -116,7 +116,7 @@ const MyPlans = () => {
                     <div className="bg-white p-6 rounded-lg shadow-md text-center">
                         <p className="text-gray-600">No itineraries found. Start planning your trip now!</p>
                         <Link to="/plan" className="inline-block mt-4 px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out">
-                            Create a Plan
+                            Create Itinerary
                         </Link>
                     </div>
                 ) : (

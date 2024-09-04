@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { APIProvider, useMapsLibrary } from '@vis.gl/react-google-maps';
 import { DateRange } from 'react-date-range';
 import 'react-date-range/dist/styles.css';
@@ -8,10 +8,10 @@ import { MapPin, Calendar } from 'lucide-react';
 const PlacesAutocomplete = ({ onPlaceSelect, placeholder }) => {
   const inputRef = useRef(null);
   const placesLibrary = useMapsLibrary('places');
-  
-  React.useEffect(() => {
+
+  useEffect(() => {
     if (!placesLibrary || !inputRef.current) return;
-    
+
     const autocomplete = new placesLibrary.Autocomplete(inputRef.current);
     autocomplete.addListener('place_changed', () => {
       const place = autocomplete.getPlace();
@@ -116,22 +116,26 @@ const TripPlannerForm = ({ onSubmit, API_KEY }) => {
               onClick={() => setShowDatePicker(!showDatePicker)}
               className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer"
               readOnly
+              aria-label="Date range"
             />
           </div>
           {showDatePicker && (
-            <div className="absolute z-10 mt-2">
+            <div className="absolute z-10 mt-2 max-w-sm">
               <DateRange
                 editableDateInputs={true}
                 onChange={handleDateChange}
                 moveRangeOnFirstSelection={false}
                 ranges={formData.dateRange}
-                className="border rounded-md shadow-lg"
+                className="border rounded-md shadow-lg p-4"
+                showSelectionPreview={true}
+                preventSnapRefocus={true}
+                rangeColors={['#3783f7', '#3783f7', '#3783f7']}
               />
             </div>
           )}
         </div>
-        <button 
-          type="submit" 
+        <button
+          type="submit"
           className="w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
           disabled={isSubmitting}
         >
