@@ -67,7 +67,7 @@ const MyPlans = () => {
             toDate: itinerary.toDate,
         });
         setItinerary(itinerary.itinerary);
-        navigate('/');
+        navigate('/plan');
     };
 
     const handleDeleteItinerary = async () => {

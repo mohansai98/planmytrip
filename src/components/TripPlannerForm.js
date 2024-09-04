@@ -1,9 +1,9 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { APIProvider, useMapsLibrary } from '@vis.gl/react-google-maps';
 import { DateRange } from 'react-date-range';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
-import { MapPin, Calendar, X } from 'lucide-react';
+import { MapPin, Calendar } from 'lucide-react';
 
 const PlacesAutocomplete = ({ onPlaceSelect, placeholder }) => {
   const inputRef = useRef(null);
@@ -44,14 +44,13 @@ const TripPlannerForm = ({ onSubmit, API_KEY }) => {
     source: '',
     destination: '',
     dateRange: [{
-      startDate: null,
-      endDate: null,
+      startDate: new Date(),
+      endDate: new Date(),
       key: 'selection'
     }]
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const datePickerRef = useRef(null);
 
   const handlePlaceSelect = (place, field) => {
     setFormData(prev => ({
@@ -65,9 +64,6 @@ const TripPlannerForm = ({ onSubmit, API_KEY }) => {
       ...prev,
       dateRange: [item.selection]
     }));
-    if (item.selection.startDate && item.selection.endDate) {
-      setShowDatePicker(false);
-    }
   };
 
   const handleSubmit = async (e) => {
@@ -77,8 +73,8 @@ const TripPlannerForm = ({ onSubmit, API_KEY }) => {
       await onSubmit({
         source: formData.source,
         destination: formData.destination,
-        fromDate: formData.dateRange[0].startDate ? formData.dateRange[0].startDate.toISOString().split('T')[0] : null,
-        toDate: formData.dateRange[0].endDate ? formData.dateRange[0].endDate.toISOString().split('T')[0] : null
+        fromDate: formData.dateRange[0].startDate.toISOString().split('T')[0],
+        toDate: formData.dateRange[0].endDate.toISOString().split('T')[0]
       });
     } finally {
       setIsSubmitting(false);
@@ -88,35 +84,8 @@ const TripPlannerForm = ({ onSubmit, API_KEY }) => {
   const formatDateRange = () => {
     const start = formData.dateRange[0].startDate;
     const end = formData.dateRange[0].endDate;
-    if (start && end) {
-      return `${start.toLocaleDateString()} - ${end.toLocaleDateString()}`;
-    }
-    return '';
+    return `${start.toLocaleDateString()} - ${end.toLocaleDateString()}`;
   };
-
-  const clearDateRange = () => {
-    setFormData(prev => ({
-      ...prev,
-      dateRange: [{
-        startDate: null,
-        endDate: null,
-        key: 'selection'
-      }]
-    }));
-  };
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (datePickerRef.current && !datePickerRef.current.contains(event.target)) {
-        setShowDatePicker(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
 
   return (
     <APIProvider apiKey={API_KEY}>
@@ -145,22 +114,12 @@ const TripPlannerForm = ({ onSubmit, API_KEY }) => {
               type="text"
               value={formatDateRange()}
               onClick={() => setShowDatePicker(!showDatePicker)}
-              className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer"
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer"
               readOnly
-              placeholder="Select date range"
             />
-            {formData.dateRange[0].startDate && (
-              <button
-                type="button"
-                onClick={clearDateRange}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-              >
-                <X size={18} />
-              </button>
-            )}
           </div>
           {showDatePicker && (
-            <div className="absolute z-10 mt-2" ref={datePickerRef}>
+            <div className="absolute z-10 mt-2">
               <DateRange
                 editableDateInputs={true}
                 onChange={handleDateChange}
