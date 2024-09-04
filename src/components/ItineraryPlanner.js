@@ -138,11 +138,10 @@ const ItineraryPlanner = () => {
             {itinerary.map((day, index) => (
               <button
                 key={index}
-                className={`px-4 py-2 whitespace-nowrap rounded-md mr-2 ${
-                  selectedDay === index
+                className={`px-4 py-2 whitespace-nowrap rounded-md mr-2 ${selectedDay === index
                     ? 'bg-blue-600 text-white'
                     : 'bg-gray-200 text-gray-800 hover:bg-gray-300'
-                }`}
+                  }`}
                 onClick={() => handleDayClick(index)}
               >
                 Day {day.day}
@@ -153,13 +152,15 @@ const ItineraryPlanner = () => {
             {itinerary[selectedDay]?.activities?.map((activity, index) => (
               <div
                 key={index}
-                className={`p-4 border rounded-md cursor-pointer transition duration-200 ${
-                  selectedActivity === activity
+                className={`p-4 border rounded-md cursor-pointer transition duration-200 ${selectedActivity === activity
                     ? 'bg-blue-50 border-blue-500'
                     : 'bg-white hover:bg-gray-50'
-                }`}
+                  }`}
                 onClick={() => handleActivityClick(activity)}
               >
+                {activity.photoUrl &&
+                  <img src={activity.photoUrl+API_KEY} alt={activity.name} className="w-full h-40 object-cover rounded-md mb-2" />
+                }
                 <h3 className="font-bold text-gray-800">{activity.name}</h3>
                 <p className="text-sm text-gray-600 mt-1">{activity.description}</p>
                 <div className="flex items-center mt-2 text-sm text-gray-700">
@@ -202,14 +203,10 @@ const ItineraryPlanner = () => {
               ))}
               {openInfoWindow && (
                 <InfoWindow
+                  headerContent={openInfoWindow.name}
                   position={openInfoWindow.coordinates}
                   onCloseClick={handleInfoWindowClose}
-                >
-                  <div className="p-2 max-w-xs bg-white">
-                    <h3 className="font-bold text-lg mb-1 text-gray-800">{openInfoWindow.name}</h3>
-                    <p className="text-sm mb-2 text-gray-600">{openInfoWindow.description}</p>
-                  </div>
-                </InfoWindow>
+                />
               )}
             </Map>
           </APIProvider>

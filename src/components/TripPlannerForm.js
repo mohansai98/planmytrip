@@ -3,7 +3,7 @@ import { APIProvider, useMapsLibrary } from '@vis.gl/react-google-maps';
 import { DateRange } from 'react-date-range';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
-import { MapPin, Calendar } from 'lucide-react';
+import { MapPin, Calendar, ChevronDown, ChevronUp } from 'lucide-react';
 
 const PlacesAutocomplete = ({ onPlaceSelect, placeholder }) => {
   const inputRef = useRef(null);
@@ -118,6 +118,12 @@ const TripPlannerForm = ({ onSubmit, API_KEY }) => {
               readOnly
               aria-label="Date range"
             />
+            <div
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 cursor-pointer"
+              onClick={() => setShowDatePicker(!showDatePicker)}
+            >
+              {showDatePicker ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+            </div>
           </div>
           {showDatePicker && (
             <div className="absolute z-10 mt-2 max-w-sm">
