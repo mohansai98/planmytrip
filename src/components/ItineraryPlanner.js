@@ -159,7 +159,7 @@ const ItineraryPlanner = () => {
                 onClick={() => handleActivityClick(activity)}
               >
                 {activity.photoUrl &&
-                  <img src={activity.photoUrl+API_KEY} alt={activity.name} className="w-full h-40 object-cover rounded-md mb-2" />
+                  <img src={activity.photoUrl} alt={activity.name} className="w-full h-40 object-cover rounded-md mb-2" />
                 }
                 <h3 className="font-bold text-gray-800">{activity.name}</h3>
                 <p className="text-sm text-gray-600 mt-1">{activity.description}</p>
