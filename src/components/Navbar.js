@@ -55,10 +55,10 @@ const Navbar = () => {
                             </>
                         ) : (
                             <>
-                                <Link to="/login" className="text-blue-600 hover:text-blue-700 transition duration-200 hover:scale-105">
+                                <Link to="/login" className="text-blue-600 hover:text-blue-700 transition duration-200 hover:scale-105 hidden">
                                     Login
                                 </Link>
-                                <Link to="/register" className="text-blue-600 border border-blue-600 px-4 py-2 rounded-lg hover:bg-blue-600 hover:text-white transition duration-200">
+                                <Link to="/register" className="text-blue-600 border border-blue-600 px-4 py-2 rounded-lg hover:bg-blue-600 hover:text-white transition duration-200 hidden">
                                     Register
                                 </Link>
                             </>
@@ -92,10 +92,10 @@ const Navbar = () => {
                             </>
                         ) : (
                             <>
-                                <Link to="/login" className="text-center block text-blue-600 hover:text-blue-700 transition duration-200 py-2" onClick={toggleMenu}>
+                                <Link to="/login" className="text-center block text-blue-600 hover:text-blue-700 transition duration-200 py-2 hidden" onClick={toggleMenu}>
                                     Login
                                 </Link>
-                                <Link to="/register" className="text-center block text-blue-600 border border-blue-600 px-4 py-2 rounded-lg hover:bg-blue-600 hover:text-white transition duration-200" onClick={toggleMenu}>
+                                <Link to="/register" className="text-center block text-blue-600 border border-blue-600 px-4 py-2 rounded-lg hover:bg-blue-600 hover:text-white transition duration-200 hidden" onClick={toggleMenu}>
                                     Register
                                 </Link>
                             </>

@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { APIProvider, Map, AdvancedMarker, Pin, InfoWindow } from '@vis.gl/react-google-maps';
 import TripPlannerForm from './TripPlannerForm';
 import RegenerateButton from './RegenerateButton';
-import SaveButton from './SaveButton';
+// import SaveButton from './SaveButton';
 import LoadingOverlay from './LoadingOverlay';
 import { useItinerary } from './ItineraryContext';
 import Alert from './Alert';
@@ -122,7 +122,7 @@ const ItineraryPlanner = () => {
         <h1 className="text-2xl font-bold text-gray-800">Your Itinerary</h1>
         <div className="flex space-x-2">
           <RegenerateButton onRegenerate={handleRegenerate} />
-          <SaveButton itinerary={itinerary} formData={formData} setAlert={setAlert} />
+          {/* <SaveButton itinerary={itinerary} formData={formData} setAlert={setAlert} /> */}
         </div>
       </div>
 

@@ -40,7 +40,8 @@ const LoginForm = () => {
         setAlert({ message: data.message || 'Login failed, please try again.', type: 'error' });
       }
     } catch (error) {
-      setAlert({ message: 'An error occurred during login.', type: 'error' });
+      // setAlert({ message: 'An error occurred during login.', type: 'error' });
+      setAlert({ message: 'Removed login feature', type: 'info' });
     } finally {
       setIsLoading(false);
     }
