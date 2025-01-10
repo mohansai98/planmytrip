@@ -40,7 +40,8 @@ const RegisterForm = () => {
                 setAlert({ message: data.message || 'Registration failed, please try again.', type: 'error' });
             }
         } catch (error) {
-            setAlert({ message: 'An error occurred during registration.', type: 'error' });
+            // setAlert({ message: 'An error occurred during registration.', type: 'error' });
+            setAlert({ message: 'Removed register feature', type: 'error' });
         } finally {
             setIsLoading(false);
         }
